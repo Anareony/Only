@@ -13,7 +13,7 @@ function App() {
         rel="stylesheet"
       />
       <Layout>
-        <Swipe historicDatesProps={historicDates} />
+        <Swipe historicDates={historicDates} />
       </Layout>
     </div>
   );
@@ -24,35 +24,6 @@ const Layout = styled.div`
   max-width: 1440px;
   height: 100%;
   margin: 0 auto;
-  border-inline: 1px solid #c7cdd9;
-
-  &:before {
-    content: "";
-    position: absolute;
-    bottom: 50%;
-    width: 100%;
-    height: 1px;
-    background: #c7cdd9;
-    z-index: -1;
-  }
-
-  &:after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    bottom: 0;
-    width: 1px;
-    height: 100%;
-    background: #c7cdd9;
-    z-index: -1;
-  }
-
-  @media screen and (width <= 768px) {
-    &:before,
-    &:after {
-      display: none;
-    }
-  }
 `;
 
 export default App;

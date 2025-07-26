@@ -1,44 +1,49 @@
 import { useEffect, useRef, useState } from "react";
 import { Swiper, SwiperRef } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
+import { Navigation } from "swiper/modules";
 
 import "swiper/css";
 import "swiper/css/navigation";
 
-import { historicDatesProps } from "./shared";
+import { THistoricDates } from "./shared";
 import gsap from "gsap";
 import {
-  Body,
-  Button,
   ButtonContainer,
   CircleButton,
-  CircleText,
   Container,
-  CounterContainer,
   CustomSlide,
-  Inser,
   SliderButton,
-  SliderCounter,
   SwiperContainer,
-  Title,
-  TitleContainer,
-  TitleDate,
   TitleMain,
-  Text,
   DateContainer,
   PaginationButton,
   PaginationContainer,
+  SlideTitle,
+  SlideBody,
+  SpinnerButton,
+  NavigationContainer,
+  SpinnerContainer,
+  DateTitle,
+  CircleTitle,
+  CircleIndex,
+  CircleWrapper,
+  CounterText,
 } from "./styles";
 
 interface Props {
-  historicDatesProps: historicDatesProps;
+  historicDates: THistoricDates;
 }
 
-export const Swipe: React.FC<Props> = ({ historicDatesProps }) => {
+export const Swipe: React.FC<Props> = ({ historicDates }) => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [dates, setDates] = useState({
+    start: Number(historicDates[0].historicMoments[0].date),
+    end: Number(historicDates[0].historicMoments.at(-1)?.date),
+  });
 
   const pointRefs = useRef<HTMLButtonElement[]>([]);
-
+  const startDateRef = useRef<HTMLDivElement>(null);
+  const endDateRef = useRef<HTMLDivElement>(null);
   const swiperRef = useRef<SwiperRef>(null);
 
   const swiperLoad = () => {
@@ -55,17 +60,53 @@ export const Swipe: React.FC<Props> = ({ historicDatesProps }) => {
     );
   };
 
-  const handleIndexState = (huina: number) => {
-    setActiveIndex(huina);
-    moves(huina);
-    pointRefs.current.forEach((item) => item.classList.remove("active"));
-    pointRefs.current[huina].classList.add("active");
+  useEffect(() => {
+    pointRefs.current[0].classList.add("active");
+  }, []);
+
+  const dateUpdate = (index: number) => {
+    const moments = historicDates[index].historicMoments;
+    const newDates = {
+      start: Number(moments[0].date),
+      end: Number(moments.at(-1)?.date),
+    };
+
+    gsap.fromTo(
+      [startDateRef.current, endDateRef.current],
+      {
+        innerText: [dates.start, dates.end],
+      },
+      {
+        duration: 0.4,
+        innerText: [newDates.start, newDates.end],
+        snap: { innerText: 1 },
+        onUpdate: () => setDates(newDates),
+      }
+    );
+  };
+
+  const handleIndexState = (index: number) => {
+    moves(index);
+  };
+
+  const handleIncreaseState = () => {
+    moves(activeIndex + 1);
+  };
+
+  const handleDecreaseState = () => {
+    moves(activeIndex - 1);
   };
 
   const moves = (currentIndex: number) => {
+    setActiveIndex(currentIndex);
     swiperLoad();
-    const totalItems = historicDatesProps.length;
-    const angleStep = 360 / totalItems;
+    dateUpdate(currentIndex);
+
+    pointRefs.current.forEach((item, i) => {
+      item.classList.toggle("active", i === currentIndex);
+    });
+
+    const angleStep = 360 / historicDates.length;
     const radius = 266;
     const baseOffset = "translate(calc(-100% + 28px), calc(-100% + 28px))";
 
@@ -97,79 +138,60 @@ export const Swipe: React.FC<Props> = ({ historicDatesProps }) => {
     });
   };
 
-  const handleIncreaseState = () => {
-    setActiveIndex(activeIndex + 1);
-    moves(activeIndex + 1);
-
-    pointRefs.current[activeIndex + 1].classList.add("active");
-    pointRefs.current[activeIndex].classList.remove("active");
-  };
-
-  const handleDecreaseState = () => {
-    setActiveIndex(activeIndex - 1);
-    moves(activeIndex - 1);
-
-    pointRefs.current[activeIndex - 1].classList.add("active");
-    pointRefs.current[activeIndex].classList.remove("active");
-  };
-
-  useEffect(() => {
-    pointRefs.current[0].classList.add("active");
-  }, []);
-
   return (
-    <Container className="circle">
+    <Container>
       <TitleMain>
         Исторические <br />
         даты
       </TitleMain>
 
-      <TitleContainer>
-        {historicDatesProps.map((item, index) => (
+      <SpinnerContainer>
+        {historicDates.map((item, index) => (
           <CircleButton
             key={index}
-            $angle={(360 / historicDatesProps.length) * index}
+            className="circle-button"
             onClick={() => handleIndexState(index)}
             ref={(el) => {
-              if (el) {
-                pointRefs.current[index] = el;
-              }
+              if (el) pointRefs.current[index] = el;
             }}
-            className="circle-button"
+            $angle={(360 / historicDates.length) * index}
           >
-            <Inser>
-              <Text>{index + 1}</Text>
-              <CircleText className="title">{item.title}</CircleText>
-            </Inser>
+            <CircleWrapper>
+              <CircleIndex>{index + 1}</CircleIndex>
+              <CircleTitle className="title">{item.title}</CircleTitle>
+            </CircleWrapper>
           </CircleButton>
         ))}
 
         <DateContainer>
-          <TitleDate $color="#5d5fef">
-            {historicDatesProps[activeIndex].firstDate}
-          </TitleDate>
-          <TitleDate $color="#ef5da8">
-            {historicDatesProps[activeIndex].secondDate}
-          </TitleDate>
+          <DateTitle $color="#5d5fef" ref={startDateRef}>
+            {historicDates[activeIndex].historicMoments[0].date}
+          </DateTitle>
+          <DateTitle $color="#ef5da8" ref={endDateRef}>
+            {historicDates[activeIndex].historicMoments.at(-1)?.date}
+          </DateTitle>
         </DateContainer>
 
-        <CounterContainer>
-          <SliderCounter>
-            {activeIndex + 1}/{historicDatesProps.length}
-          </SliderCounter>
+        <NavigationContainer>
+          <CounterText>
+            {activeIndex + 1}/{historicDates.length}
+          </CounterText>
           <ButtonContainer>
-            <Button onClick={handleDecreaseState} disabled={!activeIndex} />
-            <Button
+            <SpinnerButton
+              onClick={handleDecreaseState}
+              disabled={!activeIndex}
+            />
+            <SpinnerButton
               onClick={handleIncreaseState}
-              disabled={historicDatesProps.length === activeIndex + 1}
+              disabled={historicDates.length === activeIndex + 1}
               $isRight
             />
           </ButtonContainer>
-        </CounterContainer>
-      </TitleContainer>
+        </NavigationContainer>
+      </SpinnerContainer>
 
       <SwiperContainer>
-        <SliderButton className="slider__btn_prev" />
+        <SliderButton className="prev" />
         <Swiper
           ref={swiperRef}
           modules={[Navigation]}
@@ -177,8 +199,8 @@ export const Swipe: React.FC<Props> = ({ historicDatesProps }) => {
           slidesPerView={3}
           grabCursor={true}
           navigation={{
-            prevEl: ".slider__btn_prev",
-            nextEl: ".slider__btn_next",
+            prevEl: ".prev",
+            nextEl: ".next",
           }}
           breakpoints={{
             320: {
@@ -199,16 +221,16 @@ export const Swipe: React.FC<Props> = ({ historicDatesProps }) => {
             },
           }}
         >
-          {historicDatesProps[activeIndex].historicMoments.map((item) => (
+          {historicDates[activeIndex].historicMoments.map((item) => (
             <CustomSlide>
-              <Title>{item.date}</Title>
-              <Body>{item.text}</Body>
+              <SlideTitle>{item.date}</SlideTitle>
+              <SlideBody>{item.text}</SlideBody>
             </CustomSlide>
           ))}
         </Swiper>
-        <SliderButton className="slider__btn_next" $isRight />
+        <SliderButton className="next" $isRight />
         <PaginationContainer>
-          {historicDatesProps.map((item, index) => (
+          {historicDates.map((_, index) => (
             <PaginationButton
               key={index}
               onClick={() => handleIndexState(index)}
