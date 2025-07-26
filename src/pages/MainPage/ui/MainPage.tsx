@@ -27,6 +27,8 @@ import {
   CircleWrapper,
   CounterText,
   Wrapper,
+  MobileTitle,
+  SwiperWrapper,
 } from "./styles";
 
 interface IMainPageProps {
@@ -43,7 +45,7 @@ export const MainPage: React.FC<IMainPageProps> = ({ historicDates }) => {
   const pointRefs = useRef<HTMLButtonElement[]>([]);
   const startDateRef = useRef<HTMLDivElement>(null);
   const endDateRef = useRef<HTMLDivElement>(null);
-  const swiperRef = useRef<SwiperRef>(null);
+  const swiperRef = useRef<HTMLDivElement>(null);
 
   const ANIMATE_DURATION = 0.4;
 
@@ -98,8 +100,8 @@ export const MainPage: React.FC<IMainPageProps> = ({ historicDates }) => {
     updateAndAnimateDate(currentIndex);
 
     const angleStep = 360 / historicDates.length;
-    const radius = 266;
-    const baseOffset = "translate(calc(-100% + 56px), calc(-100% + 56px))";
+    const radius = 265;
+    const baseOffset = "translate(calc(-100% + 55px), calc(-100% + 56px))";
 
     pointRefs.current.forEach((point, index) => {
       const angle = angleStep * index;
@@ -186,42 +188,44 @@ export const MainPage: React.FC<IMainPageProps> = ({ historicDates }) => {
 
       <SwiperContainer>
         <SliderButton className="prev" />
-        <Swiper
-          ref={swiperRef}
-          modules={[Navigation]}
-          spaceBetween={80}
-          slidesPerView={3}
-          grabCursor={true}
-          navigation={{
-            prevEl: ".prev",
-            nextEl: ".next",
-          }}
-          breakpoints={{
-            320: {
-              slidesPerView: 1.5,
-              spaceBetween: 25,
-            },
-            768: {
-              slidesPerView: 1.5,
-              spaceBetween: 30,
-            },
-            1024: {
-              slidesPerView: 2.5,
-              spaceBetween: 60,
-            },
-            1280: {
-              slidesPerView: 3,
-              spaceBetween: 80,
-            },
-          }}
-        >
-          {historicDates[activeIndex].historicMoments.map((item) => (
-            <CustomSlide>
-              <SlideTitle>{item.date}</SlideTitle>
-              <SlideBody>{item.text}</SlideBody>
-            </CustomSlide>
-          ))}
-        </Swiper>
+        <SwiperWrapper ref={swiperRef}>
+          <MobileTitle>{historicDates[activeIndex].title}</MobileTitle>
+          <Swiper
+            modules={[Navigation]}
+            spaceBetween={80}
+            slidesPerView={3}
+            grabCursor={true}
+            navigation={{
+              prevEl: ".prev",
+              nextEl: ".next",
+            }}
+            breakpoints={{
+              320: {
+                slidesPerView: 1.5,
+                spaceBetween: 25,
+              },
+              768: {
+                slidesPerView: 2,
+                spaceBetween: 30,
+              },
+              1024: {
+                slidesPerView: 2.5,
+                spaceBetween: 60,
+              },
+              1280: {
+                slidesPerView: 3,
+                spaceBetween: 80,
+              },
+            }}
+          >
+            {historicDates[activeIndex].historicMoments.map((item) => (
+              <CustomSlide>
+                <SlideTitle>{item.date}</SlideTitle>
+                <SlideBody>{item.text}</SlideBody>
+              </CustomSlide>
+            ))}
+          </Swiper>
+        </SwiperWrapper>
         <SliderButton className="next" $isRight />
         <PaginationContainer>
           {historicDates.map((_, index) => (

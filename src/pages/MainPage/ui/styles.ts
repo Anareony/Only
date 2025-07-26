@@ -20,6 +20,12 @@ export const Wrapper = styled.div`
     background: var(--secondary-color);
     z-index: 0;
   }
+
+  @media screen and (width <= 768px) {
+    &:after {
+      display: none;
+    }
+  }
 `;
 
 export const Container = styled.div`
@@ -30,7 +36,7 @@ export const Container = styled.div`
   position: relative;
 
   margin-top: 20px;
-  padding-top: 80px;
+  padding-top: 60px;
 
   &:before {
     content: "";
@@ -42,9 +48,14 @@ export const Container = styled.div`
     z-index: 0;
   }
 
+  @media screen and (width <= 1024px) {
+    padding-top: 40px;
+  }
+
   @media screen and (width <= 768px) {
-    &:before,
-    &:after {
+    padding-top: 20px;
+
+    &:before {
       display: none;
     }
   }
@@ -77,6 +88,7 @@ export const TitleMain = styled.div`
 
   @media screen and (width <= 1024px) {
     padding: 0 60px;
+    font-size: 36px;
   }
 
   @media screen and (width <= 768px) {
@@ -111,6 +123,7 @@ export const SpinnerContainer = styled.div`
   }
 
   @media screen and (width <= 768px) {
+    top: 25%;
     &:before {
       display: none;
     }
@@ -124,18 +137,13 @@ export const CircleButton = styled.button<{ $angle: number }>`
   border-radius: 50%;
   border: none;
   background: transparent;
-
   cursor: pointer;
-
   position: absolute;
-  // top: calc(50%);
-  // left: calc(50%);
-
   z-index: 5;
 
   transform-origin: center;
-  transform: translate(calc(-100% + 56px), calc(-100% + 56px))
-    rotate(${({ $angle }) => $angle - 60}deg) translate(calc(100% + 210px))
+  transform: translate(calc(-100% + 55px), calc(-100% + 56px))
+    rotate(${({ $angle }) => $angle - 60}deg) translate(calc(100% + 209px))
     rotate(${({ $angle }) => -$angle + 60}deg);
 
   @media screen and (width <= 768px) {
@@ -214,7 +222,7 @@ export const DateContainer = styled.div`
   }
 
   @media screen and (width <= 768px) {
-    gap: 20px;
+    gap: 25px;
   }
 `;
 
@@ -236,10 +244,16 @@ export const NavigationContainer = styled.div`
   width: 100%;
   position: absolute;
   bottom: calc(50% - 306px);
-  padding-left: 80px;
+  padding: 0 80px;
+  z-index: 2;
+
+  @media screen and (width <= 1024px) {
+    padding: 0 60px;
+  }
 
   @media screen and (width <= 768px) {
-    bottom: 10px;
+    bottom: -295px;
+    padding: 0 20px;
   }
 `;
 
@@ -280,9 +294,11 @@ export const SpinnerButton = styled.button<{ $isRight?: boolean }>`
     content: "";
     position: absolute;
     border: solid var(--primary-color);
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     border-width: 0 2px 2px 0;
+    bottom: calc(50% - 4px);
+    left: calc(50% - 6px);
   }
 
   &:hover {
@@ -301,15 +317,17 @@ export const SpinnerButton = styled.button<{ $isRight?: boolean }>`
     width: 25px;
     height: 25px;
     &::before {
-      width: 4px;
-      height: 4px;
+      width: 7px;
+      height: 7px;
+      bottom: calc(50% - 3px);
+      left: calc(50% - 4px);
     }
   }
 `;
 
 export const SwiperContainer = styled.div`
   position: relative;
-  padding: 0 80px 20px 80px;
+  padding: 0 80px 30px 80px;
   display: flex;
   align-items: center;
 
@@ -320,7 +338,13 @@ export const SwiperContainer = styled.div`
   @media screen and (width <= 768px) {
     padding: 0;
     margin: 0 20px;
+    padding-bottom: 100px;
   }
+`;
+
+export const SwiperWrapper = styled.div`
+  position: relative;
+  width: 100%;
 `;
 
 export const SliderButton = styled.button<{ $isRight?: boolean }>`
@@ -340,9 +364,11 @@ export const SliderButton = styled.button<{ $isRight?: boolean }>`
     content: "";
     position: absolute;
     border: solid var(--blue-color);
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
     border-width: 0 2px 2px 0;
+    bottom: calc(50% - 3px);
+    left: calc(50% - 5px);
   }
 
   &.swiper-button-disabled {
@@ -360,12 +386,24 @@ export const SliderButton = styled.button<{ $isRight?: boolean }>`
 
 export const CustomSlide = styled(SwiperSlide)`
   min-height: 150px;
+  transition: all 0.4s ease-in-out;
+
+  @media screen and (width <= 768px) {
+    &.swiper-slide {
+      opacity: 0.5;
+    }
+    &.swiper-slide-active {
+      opacity: 1;
+    }
+  }
 `;
 
 export const SlideTitle = styled.div`
+  font-family: "Bebas Neue", sans-serif;
   font-weight: 400;
   font-size: 25px;
   color: var(--blue-color);
+  margin-bottom: 15px;
 
   @media screen and (width <= 768px) {
     font-size: 16px;
@@ -392,6 +430,7 @@ export const PaginationContainer = styled.div`
 
   @media screen and (width <= 768px) {
     display: flex;
+    bottom: 32px;
   }
 `;
 
@@ -405,4 +444,19 @@ export const PaginationButton = styled.button<{ $isActive: boolean }>`
   background: ${({ $isActive }) =>
     $isActive ? "var(--primary-color)" : "var(--border-color)"};
   cursor: pointer;
+`;
+
+export const MobileTitle = styled.div`
+  color: var(--primary-color);
+  display: none;
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0;
+  padding: 0 0 20px;
+  border-bottom: 1px solid var(--secondary-color);
+  margin-bottom: 20px;
+
+  @media screen and (width <= 768px) {
+    display: block;
+  }
 `;
