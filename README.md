@@ -14,7 +14,7 @@
    ```sh
    npm install
    ```
-4. Запустите проект
+4. Start the project
    ```sh
    npm start
    ```
