@@ -1,6 +1,7 @@
 {
   "name": "only",
   "version": "0.1.0",
+  "homepage": "https://anareony.github.io/Only",
   "private": true,
   "dependencies": {
     "@gsap/react": "^2.1.2",
