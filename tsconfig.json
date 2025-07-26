@@ -2,6 +2,15 @@
   "compilerOptions": {
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
+    "baseUrl": "src",
+    "paths": {
+      "app/*": ["app/*"],
+      "entities/*": ["entities/*"],
+      "features/*": ["features/*"],
+      "pages/*": ["pages/*"],
+      "shared/*": ["shared/*"],
+      "widgets/*": ["widgets/*"]
+    },
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,

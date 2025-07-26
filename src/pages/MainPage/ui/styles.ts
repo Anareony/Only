@@ -1,23 +1,13 @@
 import styled from "styled-components";
 import { SwiperSlide } from "swiper/react";
 
-export const Container = styled.div`
+export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
-  position: relative;
-  border-inline: 1px solid #c7cdd9;
 
-  &:before {
-    content: "";
-    position: absolute;
-    bottom: 50%;
-    width: 100%;
-    height: 1px;
-    background: #c7cdd9;
-    z-index: -1;
-  }
+  border-inline: 1px solid #c7cdd9;
 
   &:after {
     content: "";
@@ -26,6 +16,27 @@ export const Container = styled.div`
     bottom: 0;
     width: 1px;
     height: 100%;
+    background: #c7cdd9;
+    z-index: -1;
+  }
+`;
+
+export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  position: relative;
+
+  margin-top: 20px;
+  padding-top: 80px;
+
+  &:before {
+    content: "";
+    position: absolute;
+    bottom: 50%;
+    width: 100%;
+    height: 1px;
     background: #c7cdd9;
     z-index: -1;
   }
@@ -40,7 +51,6 @@ export const Container = styled.div`
 
 export const TitleMain = styled.div`
   position: relative;
-  font-family: "PT Sans", sans-serif;
   font-weight: 700;
   font-size: 56px;
   line-height: 120%;
@@ -113,13 +123,13 @@ export const CircleButton = styled.button<{ $angle: number }>`
   cursor: pointer;
 
   position: absolute;
-  top: calc(50%);
-  left: calc(50%);
+  // top: calc(50%);
+  // left: calc(50%);
 
   z-index: 5;
 
   transform-origin: center;
-  transform: translate(calc(-100% + 28px), calc(-100% + 28px))
+  transform: translate(calc(-100% + 56px), calc(-100% + 56px))
     rotate(${({ $angle }) => $angle - 60}deg) translate(calc(100% + 210px))
     rotate(${({ $angle }) => -$angle + 60}deg);
 
@@ -158,8 +168,6 @@ export const CircleWrapper = styled.div`
 
 export const CircleIndex = styled.div`
   opacity: 0;
-  font-family: "PT Sans", sans-serif;
-  font-weight: 400;
   font-size: 20px;
   color: #42567a;
   transition: all 0.4s ease-in-out;
@@ -174,7 +182,6 @@ export const CircleIndex = styled.div`
 `;
 
 export const CircleTitle = styled.div`
-  font-family: "PT Sans", sans-serif;
   font-weight: 700;
   font-size: 20px;
   line-height: 30px;
@@ -207,7 +214,6 @@ export const DateContainer = styled.div`
 `;
 
 export const DateTitle = styled.div<{ $color?: string }>`
-  font-family: "PT Sans", sans-serif;
   font-weight: 700;
   font-size: 200px;
   color: ${(props) => (props.$color ? props.$color : "#BF4F74")};
@@ -224,7 +230,8 @@ export const DateTitle = styled.div<{ $color?: string }>`
 export const NavigationContainer = styled.div`
   width: 100%;
   position: absolute;
-  bottom: calc(50% - 276px);
+  bottom: calc(50% - 306px);
+  padding-left: 80px;
 
   @media screen and (width <= 768px) {
     bottom: 10px;
@@ -232,7 +239,6 @@ export const NavigationContainer = styled.div`
 `;
 
 export const CounterText = styled.div`
-  font-family: "PT Sans", sans-serif;
   font-weight: 400;
   font-size: 14px;
   color: #42567a;
@@ -291,7 +297,7 @@ export const SpinnerButton = styled.button<{ $isRight?: boolean }>`
 
 export const SwiperContainer = styled.div`
   position: relative;
-  padding: 0 80px;
+  padding: 0 80px 20px 80px;
   display: flex;
   align-items: center;
 
@@ -345,7 +351,6 @@ export const CustomSlide = styled(SwiperSlide)`
 `;
 
 export const SlideTitle = styled.div`
-  font-family: "PT Sans", sans-serif;
   font-weight: 400;
   font-size: 25px;
   color: #3877ee;
@@ -356,7 +361,6 @@ export const SlideTitle = styled.div`
 `;
 
 export const SlideBody = styled.div`
-  font-family: "PT Sans", sans-serif;
   font-weight: 400;
   font-size: 20px;
   color: #42567a;

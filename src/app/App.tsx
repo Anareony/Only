@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { historicDates } from "./shared";
-import { Swipe } from "./Swipe";
-import "./App.css";
+import { historicDates } from "shared/consts/historicDates";
+import { MainPage } from "pages/MainPage";
+import "./styles/global.css";
 
 function App() {
   return (
@@ -13,7 +13,7 @@ function App() {
         rel="stylesheet"
       />
       <Layout>
-        <Swipe historicDates={historicDates} />
+        <MainPage historicDates={historicDates} />
       </Layout>
     </div>
   );

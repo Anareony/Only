@@ -1,12 +1,10 @@
 import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
 import { Swiper, SwiperRef } from "swiper/react";
 import { Navigation } from "swiper/modules";
-
 import "swiper/css";
 import "swiper/css/navigation";
-
-import { THistoricDates } from "./shared";
-import gsap from "gsap";
+import { THistoricDates } from "shared/consts/historicDates";
 import {
   ButtonContainer,
   CircleButton,
@@ -28,13 +26,14 @@ import {
   CircleIndex,
   CircleWrapper,
   CounterText,
+  Wrapper,
 } from "./styles";
 
-interface Props {
+interface IMainPageProps {
   historicDates: THistoricDates;
 }
 
-export const Swipe: React.FC<Props> = ({ historicDates }) => {
+export const MainPage: React.FC<IMainPageProps> = ({ historicDates }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [dates, setDates] = useState({
     start: Number(historicDates[0].historicMoments[0].date),
@@ -46,25 +45,13 @@ export const Swipe: React.FC<Props> = ({ historicDates }) => {
   const endDateRef = useRef<HTMLDivElement>(null);
   const swiperRef = useRef<SwiperRef>(null);
 
-  const swiperLoad = () => {
-    gsap.fromTo(
-      swiperRef.current,
-      {
-        opacity: 0,
-      },
-      {
-        duration: 0.8,
-        opacity: 1,
-        ease: "power1.in",
-      }
-    );
-  };
+  const ANIMATE_DURATION = 0.4;
 
   useEffect(() => {
     pointRefs.current[0].classList.add("active");
   }, []);
 
-  const dateUpdate = (index: number) => {
+  const updateAndAnimateDate = (index: number) => {
     const moments = historicDates[index].historicMoments;
     const newDates = {
       start: Number(moments[0].date),
@@ -72,53 +59,58 @@ export const Swipe: React.FC<Props> = ({ historicDates }) => {
     };
 
     gsap.fromTo(
-      [startDateRef.current, endDateRef.current],
+      startDateRef.current,
+      { innerText: dates.start },
       {
-        innerText: [dates.start, dates.end],
-      },
-      {
-        duration: 0.4,
-        innerText: [newDates.start, newDates.end],
+        duration: ANIMATE_DURATION,
+        innerText: newDates.start,
         snap: { innerText: 1 },
-        onUpdate: () => setDates(newDates),
       }
     );
+
+    gsap.fromTo(
+      endDateRef.current,
+      { innerText: dates.end },
+      {
+        duration: ANIMATE_DURATION,
+        innerText: newDates.end,
+        snap: { innerText: 1 },
+      }
+    );
+
+    gsap.fromTo(
+      swiperRef.current,
+      {
+        opacity: 0,
+      },
+      {
+        duration: ANIMATE_DURATION,
+        opacity: 1,
+        ease: "none",
+      }
+    );
+
+    setDates({ start: newDates.start, end: newDates.end });
   };
 
-  const handleIndexState = (index: number) => {
-    moves(index);
-  };
-
-  const handleIncreaseState = () => {
-    moves(activeIndex + 1);
-  };
-
-  const handleDecreaseState = () => {
-    moves(activeIndex - 1);
-  };
-
-  const moves = (currentIndex: number) => {
+  const animateSpinnerTransition = (currentIndex: number) => {
     setActiveIndex(currentIndex);
-    swiperLoad();
-    dateUpdate(currentIndex);
-
-    pointRefs.current.forEach((item, i) => {
-      item.classList.toggle("active", i === currentIndex);
-    });
+    updateAndAnimateDate(currentIndex);
 
     const angleStep = 360 / historicDates.length;
     const radius = 266;
-    const baseOffset = "translate(calc(-100% + 28px), calc(-100% + 28px))";
+    const baseOffset = "translate(calc(-100% + 56px), calc(-100% + 56px))";
 
     pointRefs.current.forEach((point, index) => {
       const angle = angleStep * index;
       const rotationAngle = angleStep * currentIndex;
-
       const rotationOffset = -angle + 60;
+
+      point.classList.toggle("active", index === currentIndex);
 
       gsap.to(point, {
         rotation: rotationAngle,
-        duration: 0.4,
+        duration: ANIMATE_DURATION,
         ease: "none",
         modifiers: {
           rotation: (rotation) => {
@@ -139,56 +131,58 @@ export const Swipe: React.FC<Props> = ({ historicDates }) => {
   };
 
   return (
-    <Container>
-      <TitleMain>
-        Исторические <br />
-        даты
-      </TitleMain>
+    <Wrapper>
+      <Container>
+        <TitleMain>
+          Исторические <br />
+          даты
+        </TitleMain>
 
-      <SpinnerContainer>
-        {historicDates.map((item, index) => (
-          <CircleButton
-            key={index}
-            className="circle-button"
-            onClick={() => handleIndexState(index)}
-            ref={(el) => {
-              if (el) pointRefs.current[index] = el;
-            }}
-            $angle={(360 / historicDates.length) * index}
-          >
-            <CircleWrapper>
-              <CircleIndex>{index + 1}</CircleIndex>
-              <CircleTitle className="title">{item.title}</CircleTitle>
-            </CircleWrapper>
-          </CircleButton>
-        ))}
+        <SpinnerContainer>
+          {historicDates.map((item, index) => (
+            <CircleButton
+              key={index}
+              className="circle-button"
+              onClick={() => animateSpinnerTransition(index)}
+              ref={(el) => {
+                if (el) pointRefs.current[index] = el;
+              }}
+              $angle={(360 / historicDates.length) * index}
+            >
+              <CircleWrapper>
+                <CircleIndex>{index + 1}</CircleIndex>
+                <CircleTitle className="title">{item.title}</CircleTitle>
+              </CircleWrapper>
+            </CircleButton>
+          ))}
 
-        <DateContainer>
-          <DateTitle $color="#5d5fef" ref={startDateRef}>
-            {historicDates[activeIndex].historicMoments[0].date}
-          </DateTitle>
-          <DateTitle $color="#ef5da8" ref={endDateRef}>
-            {historicDates[activeIndex].historicMoments.at(-1)?.date}
-          </DateTitle>
-        </DateContainer>
+          <DateContainer>
+            <DateTitle $color="#5d5fef" ref={startDateRef}>
+              {historicDates[activeIndex].historicMoments[0].date}
+            </DateTitle>
+            <DateTitle $color="#ef5da8" ref={endDateRef}>
+              {historicDates[activeIndex].historicMoments.at(-1)?.date}
+            </DateTitle>
+          </DateContainer>
 
-        <NavigationContainer>
-          <CounterText>
-            {activeIndex + 1}/{historicDates.length}
-          </CounterText>
-          <ButtonContainer>
-            <SpinnerButton
-              onClick={handleDecreaseState}
-              disabled={!activeIndex}
-            />
-            <SpinnerButton
-              onClick={handleIncreaseState}
-              disabled={historicDates.length === activeIndex + 1}
-              $isRight
-            />
-          </ButtonContainer>
-        </NavigationContainer>
-      </SpinnerContainer>
+          <NavigationContainer>
+            <CounterText>
+              {activeIndex + 1}/{historicDates.length}
+            </CounterText>
+            <ButtonContainer>
+              <SpinnerButton
+                onClick={() => animateSpinnerTransition(activeIndex - 1)}
+                disabled={!activeIndex}
+              />
+              <SpinnerButton
+                onClick={() => animateSpinnerTransition(activeIndex + 1)}
+                disabled={historicDates.length === activeIndex + 1}
+                $isRight
+              />
+            </ButtonContainer>
+          </NavigationContainer>
+        </SpinnerContainer>
+      </Container>
 
       <SwiperContainer>
         <SliderButton className="prev" />
@@ -216,7 +210,7 @@ export const Swipe: React.FC<Props> = ({ historicDates }) => {
               spaceBetween: 60,
             },
             1280: {
-              slidesPerView: 4,
+              slidesPerView: 3,
               spaceBetween: 80,
             },
           }}
@@ -233,12 +227,12 @@ export const Swipe: React.FC<Props> = ({ historicDates }) => {
           {historicDates.map((_, index) => (
             <PaginationButton
               key={index}
-              onClick={() => handleIndexState(index)}
+              onClick={() => animateSpinnerTransition(index)}
               $isActive={activeIndex === index}
             />
           ))}
         </PaginationContainer>
       </SwiperContainer>
-    </Container>
+    </Wrapper>
   );
 };
