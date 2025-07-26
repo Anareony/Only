@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import { Swiper, SwiperRef } from "swiper/react";
+import { Swiper } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -29,6 +29,7 @@ import {
   Wrapper,
   MobileTitle,
   SwiperWrapper,
+  Dot,
 } from "./styles";
 
 interface IMainPageProps {
@@ -47,7 +48,8 @@ export const MainPage: React.FC<IMainPageProps> = ({ historicDates }) => {
   const endDateRef = useRef<HTMLDivElement>(null);
   const swiperRef = useRef<HTMLDivElement>(null);
 
-  const ANIMATE_DURATION = 0.4;
+  const ANIMATE_DURATION = 0.8;
+  const EASE: gsap.EaseString | gsap.EaseFunction = "none";
 
   useEffect(() => {
     pointRefs.current[0].classList.add("active");
@@ -65,6 +67,7 @@ export const MainPage: React.FC<IMainPageProps> = ({ historicDates }) => {
       { innerText: dates.start },
       {
         duration: ANIMATE_DURATION,
+        ease: EASE,
         innerText: newDates.start,
         snap: { innerText: 1 },
       }
@@ -75,6 +78,7 @@ export const MainPage: React.FC<IMainPageProps> = ({ historicDates }) => {
       { innerText: dates.end },
       {
         duration: ANIMATE_DURATION,
+        ease: EASE,
         innerText: newDates.end,
         snap: { innerText: 1 },
       }
@@ -87,8 +91,8 @@ export const MainPage: React.FC<IMainPageProps> = ({ historicDates }) => {
       },
       {
         duration: ANIMATE_DURATION,
+        ease: EASE,
         opacity: 1,
-        ease: "none",
       }
     );
 
@@ -111,9 +115,9 @@ export const MainPage: React.FC<IMainPageProps> = ({ historicDates }) => {
       point.classList.toggle("active", index === currentIndex);
 
       gsap.to(point, {
-        rotation: rotationAngle,
+        rotation: `${rotationAngle}_short`,
         duration: ANIMATE_DURATION,
-        ease: "none",
+        ease: EASE,
         modifiers: {
           rotation: (rotation) => {
             const newAngle = parseFloat(rotation);
@@ -139,7 +143,6 @@ export const MainPage: React.FC<IMainPageProps> = ({ historicDates }) => {
           Исторические <br />
           даты
         </TitleMain>
-
         <SpinnerContainer>
           {historicDates.map((item, index) => (
             <CircleButton
@@ -157,7 +160,6 @@ export const MainPage: React.FC<IMainPageProps> = ({ historicDates }) => {
               </CircleWrapper>
             </CircleButton>
           ))}
-
           <DateContainer>
             <DateTitle $color="var(--blue-color)" ref={startDateRef}>
               {historicDates[activeIndex].historicMoments[0].date}
@@ -166,7 +168,6 @@ export const MainPage: React.FC<IMainPageProps> = ({ historicDates }) => {
               {historicDates[activeIndex].historicMoments.at(-1)?.date}
             </DateTitle>
           </DateContainer>
-
           <NavigationContainer>
             <CounterText>
               {activeIndex + 1}/{historicDates.length}
@@ -185,7 +186,6 @@ export const MainPage: React.FC<IMainPageProps> = ({ historicDates }) => {
           </NavigationContainer>
         </SpinnerContainer>
       </Container>
-
       <SwiperContainer>
         <SliderButton className="prev" />
         <SwiperWrapper ref={swiperRef}>
@@ -200,6 +200,10 @@ export const MainPage: React.FC<IMainPageProps> = ({ historicDates }) => {
               nextEl: ".next",
             }}
             breakpoints={{
+              160: {
+                slidesPerView: 1,
+                spaceBetween: 20,
+              },
               320: {
                 slidesPerView: 1.5,
                 spaceBetween: 25,
@@ -232,8 +236,9 @@ export const MainPage: React.FC<IMainPageProps> = ({ historicDates }) => {
             <PaginationButton
               key={index}
               onClick={() => animateSpinnerTransition(index)}
-              $isActive={activeIndex === index}
-            />
+            >
+              <Dot $isActive={activeIndex === index} />
+            </PaginationButton>
           ))}
         </PaginationContainer>
       </SwiperContainer>

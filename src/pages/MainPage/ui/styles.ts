@@ -7,7 +7,6 @@ export const Wrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
-
   border-inline: 1px solid var(--secondary-color);
 
   &:after {
@@ -158,9 +157,7 @@ export const CircleWrapper = styled.div`
   width: 56px;
   height: 56px;
   transform: scale(0.1);
-
   padding: 0;
-
   cursor: pointer;
   border-radius: 50%;
 
@@ -310,6 +307,7 @@ export const SpinnerButton = styled.button<{ $isRight?: boolean }>`
 
     &:hover {
       background: transparent;
+      cursor: default;
     }
   }
 
@@ -319,8 +317,8 @@ export const SpinnerButton = styled.button<{ $isRight?: boolean }>`
     &::before {
       width: 7px;
       height: 7px;
-      bottom: calc(50% - 3px);
-      left: calc(50% - 4px);
+      bottom: calc(50% - 2px);
+      left: calc(50% - 5px);
     }
   }
 `;
@@ -424,7 +422,6 @@ export const PaginationContainer = styled.div`
   z-index: 10;
   position: absolute;
   display: none;
-  gap: 10px;
   justify-content: center;
   width: 100%;
 
@@ -434,16 +431,20 @@ export const PaginationContainer = styled.div`
   }
 `;
 
-export const PaginationButton = styled.button<{ $isActive: boolean }>`
-  width: 6px;
-  height: 6px;
-  padding: 0;
+export const PaginationButton = styled.button`
+  padding: 5px;
   margin: 0;
   border: none;
+  background: transparent;
+  cursor: pointer;
+`;
+
+export const Dot = styled.div<{ $isActive: boolean }>`
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: ${({ $isActive }) =>
     $isActive ? "var(--primary-color)" : "var(--border-color)"};
-  cursor: pointer;
 `;
 
 export const MobileTitle = styled.div`
