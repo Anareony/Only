@@ -1,3 +1,5 @@
+### [Demo](https://anareony.github.io/Only/)
+
 ### Installation
 
 1. Clone the repo
