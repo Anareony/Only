@@ -157,10 +157,10 @@ export const MainPage: React.FC<IMainPageProps> = ({ historicDates }) => {
           ))}
 
           <DateContainer>
-            <DateTitle $color="#5d5fef" ref={startDateRef}>
+            <DateTitle $color="var(--blue-color)" ref={startDateRef}>
               {historicDates[activeIndex].historicMoments[0].date}
             </DateTitle>
-            <DateTitle $color="#ef5da8" ref={endDateRef}>
+            <DateTitle $color="var(--pink-color)" ref={endDateRef}>
               {historicDates[activeIndex].historicMoments.at(-1)?.date}
             </DateTitle>
           </DateContainer>

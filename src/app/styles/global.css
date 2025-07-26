@@ -1,10 +1,10 @@
 html,
 body,
-#root,
-.App {
+#root {
   height: 100%;
   margin: 0;
   padding: 0;
+  background: #f4f5f9;
 }
 
 body {
@@ -57,4 +57,19 @@ button {
 
 a {
   text-decoration: none;
+}
+
+.App {
+  position: relative;
+  max-width: 1440px;
+  height: 100%;
+  margin: 0 auto;
+
+  --primary-color: #42567a;
+  --secondary-color: #c7cdd9;
+  --blue-color: #3877ee;
+  --pink-color: #ef5da8;
+  --white-color: #fff;
+  --bg-color: #f4f5f9;
+  --border-color: #303e5880;
 }

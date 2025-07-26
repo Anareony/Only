@@ -2,12 +2,13 @@ import styled from "styled-components";
 import { SwiperSlide } from "swiper/react";
 
 export const Wrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
 
-  border-inline: 1px solid #c7cdd9;
+  border-inline: 1px solid var(--secondary-color);
 
   &:after {
     content: "";
@@ -16,8 +17,8 @@ export const Wrapper = styled.div`
     bottom: 0;
     width: 1px;
     height: 100%;
-    background: #c7cdd9;
-    z-index: -1;
+    background: var(--secondary-color);
+    z-index: 0;
   }
 `;
 
@@ -37,8 +38,8 @@ export const Container = styled.div`
     bottom: 50%;
     width: 100%;
     height: 1px;
-    background: #c7cdd9;
-    z-index: -1;
+    background: var(--secondary-color);
+    z-index: 0;
   }
 
   @media screen and (width <= 768px) {
@@ -55,7 +56,7 @@ export const TitleMain = styled.div`
   font-size: 56px;
   line-height: 120%;
   letter-spacing: 0%;
-  color: #42567a;
+  color: var(--primary-color);
   padding: 0 80px;
 
   &::after {
@@ -63,7 +64,12 @@ export const TitleMain = styled.div`
     left: 0;
     top: 0;
     height: 100%;
-    border-image: linear-gradient(to bottom, #3877ee, #ef5da8) 0 0 0 1;
+    border-image: linear-gradient(
+        to bottom,
+        var(--blue-color),
+        var(--pink-color)
+      )
+      0 0 0 1;
     border-style: solid;
     position: absolute;
     border-width: 0 0 0 5px;
@@ -100,9 +106,8 @@ export const SpinnerContainer = styled.div`
     width: 530px;
     height: 530px;
     border-radius: 50%;
-    border: 1px solid #c7cdd9;
-    background: #fff;
-    z-index: -2;
+    border: 1px solid var(--secondary-color);
+    z-index: 0;
   }
 
   @media screen and (width <= 768px) {
@@ -151,25 +156,25 @@ export const CircleWrapper = styled.div`
   cursor: pointer;
   border-radius: 50%;
 
-  background: #42567a;
-  border: 1px solid #303e5880;
+  background: var(--primary-color);
+  border: 1px solid var(--border-color);
   transition: all 0.4s ease-in-out;
 
   .circle-button:hover & {
     transform: scale(1);
-    background: #fff;
+    background: var(--bg-color);
   }
 
   .circle-button.active & {
     transform: scale(1);
-    background: #fff;
+    background: var(--bg-color);
   }
 `;
 
 export const CircleIndex = styled.div`
   opacity: 0;
   font-size: 20px;
-  color: #42567a;
+  color: var(--primary-color);
   transition: all 0.4s ease-in-out;
 
   .circle-button:hover & {
@@ -185,7 +190,7 @@ export const CircleTitle = styled.div`
   font-weight: 700;
   font-size: 20px;
   line-height: 30px;
-  color: #42567a;
+  color: var(--primary-color);
 
   position: absolute;
   left: calc(100% + 20px);
@@ -216,7 +221,7 @@ export const DateContainer = styled.div`
 export const DateTitle = styled.div<{ $color?: string }>`
   font-weight: 700;
   font-size: 200px;
-  color: ${(props) => (props.$color ? props.$color : "#BF4F74")};
+  color: ${(props) => (props.$color ? props.$color : "")};
 
   @media screen and (width <= 1024px) {
     font-size: 132px;
@@ -241,7 +246,7 @@ export const NavigationContainer = styled.div`
 export const CounterText = styled.div`
   font-weight: 400;
   font-size: 14px;
-  color: #42567a;
+  color: var(--primary-color);
   margin-bottom: 20px;
 
   @media screen and (width <= 768px) {
@@ -260,7 +265,7 @@ export const ButtonContainer = styled.div`
 
 export const SpinnerButton = styled.button<{ $isRight?: boolean }>`
   background: transparent;
-  border: 1px solid #42567a80;
+  border: 1px solid var(--primary-color);
   border-radius: 50%;
   width: 50px;
   height: 50px;
@@ -274,15 +279,22 @@ export const SpinnerButton = styled.button<{ $isRight?: boolean }>`
   &::before {
     content: "";
     position: absolute;
-    border: solid #42567a;
+    border: solid var(--primary-color);
     width: 8px;
     height: 8px;
     border-width: 0 2px 2px 0;
   }
 
+  &:hover {
+    background: var(--white-color);
+  }
+
   &:disabled {
     opacity: 50%;
-    cursor: not-allowed;
+
+    &:hover {
+      background: transparent;
+    }
   }
 
   @media screen and (width <= 768px) {
@@ -317,8 +329,8 @@ export const SliderButton = styled.button<{ $isRight?: boolean }>`
   height: 40px;
   border-radius: 100%;
   border: none;
-  box-shadow: 0 0 15px 0 rgba(56, 119, 238, 0.1);
-  background: #fff;
+  box-shadow: 0 0 15px 0 #3877ee1a;
+  background: var(--white-color);
   cursor: pointer;
   padding: 0 10px 10px 0;
   ${({ $isRight }) => ($isRight ? "right: 20px" : "left: 20px")};
@@ -327,7 +339,7 @@ export const SliderButton = styled.button<{ $isRight?: boolean }>`
   &::before {
     content: "";
     position: absolute;
-    border: solid #3877ee;
+    border: solid var(--blue-color);
     width: 6px;
     height: 6px;
     border-width: 0 2px 2px 0;
@@ -353,7 +365,7 @@ export const CustomSlide = styled(SwiperSlide)`
 export const SlideTitle = styled.div`
   font-weight: 400;
   font-size: 25px;
-  color: #3877ee;
+  color: var(--blue-color);
 
   @media screen and (width <= 768px) {
     font-size: 16px;
@@ -363,7 +375,7 @@ export const SlideTitle = styled.div`
 export const SlideBody = styled.div`
   font-weight: 400;
   font-size: 20px;
-  color: #42567a;
+  color: var(--primary-color);
 
   @media screen and (width <= 768px) {
     font-size: 14px;
@@ -390,6 +402,7 @@ export const PaginationButton = styled.button<{ $isActive: boolean }>`
   margin: 0;
   border: none;
   border-radius: 50%;
-  background: ${({ $isActive }) => ($isActive ? "#42567A" : "#42567A80")};
+  background: ${({ $isActive }) =>
+    $isActive ? "var(--primary-color)" : "var(--border-color)"};
   cursor: pointer;
 `;
